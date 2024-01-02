@@ -56,7 +56,7 @@ export class AppService {
    */
   async main(request: Request): Promise<any> {
     const openai = new OpenAI({
-      apiKey: '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'
+      apiKey: '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'
     });
     /**
      * Call Open AI Chat Completion API 
@@ -71,8 +71,7 @@ export class AppService {
         },
         {
           "role": "user",
-          "content": request.body.userString || request.body.userString._value +
-            this.openAiMessageUserContent
+          "content": request.body.userString
         }
       ]
 
@@ -94,7 +93,7 @@ export class AppService {
       } else if (this.placeServiceIntent.indexOf(opanAiResponseJson.intent) > -1) {
         const { places, placeCategory, placeSubCategory } = opanAiResponseJson;
         const [source] = places;
-        const placesResponse: any = this.googleMapService.getPlaces(source, placeCategory, placeSubCategory);
+        const placesResponse: any = await this.googleMapService.getPlaces(source, placeCategory, placeSubCategory);
         console.log(">>> google api response", placesResponse);
         return {
           opanAiResponse,

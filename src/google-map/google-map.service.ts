@@ -9,7 +9,7 @@ import { Client, DirectionsRequest, DirectionsResponse, Status } from "@googlema
 
 @Injectable()
 export class GoogleMapService {
-	private GOOGLE_API_KEY: string = '';
+	private GOOGLE_API_KEY: string = 'AIzaSyDeBJQecxX4ZjjPL6aWLogO5bwQusF4kZw';
 	private client: any = new Client({});
 
 	async getDirections(source: string, desitination: string): Promise<any> {
@@ -45,18 +45,22 @@ export class GoogleMapService {
 	async getPlaces(source: string, placeCategory: string, placeSubCategory: string): Promise<any> {
 		const params = {
 			// name: source,
-			keyword: `${placeSubCategory} ${placeCategory} in ${source}`,
+			// keyword: `${placeSubCategory} ${placeCategory} in ${source}`,
 			key: this.GOOGLE_API_KEY,
+			location: { lat: 37.7749, lng: -122.4194 },
+			radius: 1000,
+			type: 'restaurant'
 		};
 		try {
 			const response = await this.client.placesNearby({
 				params: params,
 			})
+			console.log('>>> finding plaes newrby response', response)
 			const { data } = response;
 			if (data.status === Status.OK) {
 				// Directions data is available in data.routes
-				const routes = data.routes;
-				return routes;
+				const places = data.results;
+				return places;
 			} else {
 				console.error('Directions API request failed:', data.error_message);
 			}
